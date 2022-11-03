@@ -1,0 +1,57 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    | {{ list.name }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ list.name }}</h1>
+    <hr>
+    <form method="post" action="">
+        {% csrf_token %}
+
+        <!--  list of tasks  -->
+        {% for item in list.item_set.all %}
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        {% if item.complete == True %}
+                            <input type="checkbox", value="clicked", name="done{{ item.id }}" checked>
+                        {% else %}
+                            <input type="checkbox", value="clicked", name="done{{ item.id }}">
+                        {% endif %}
+                    </div>
+                </div>
+                <input name="name{{ item.id }}", type="text", value="{{item.text}}", class="form-control"/>
+                <input name="ddl{{ item.id }}", type="date", value="{{item.deadline|date:'Y-m-d'}}", class="form-control"/>
+                <button type="submit", name="remove{{ item.id }}", value="r{{ item.id }}", class="btn btn-danger">Delete item</button>
+            </div>
+        {% endfor %}
+
+        <!--  save button  -->
+        {% if list.item_set.all %}
+        <div class="input-group mb-3">
+            <button type="submit", name="save", value="save", class="btn btn-primary">Save</button>
+        </div>
+        {% endif %}
+
+        <!--  adding task  -->
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><b>Task</b></span>
+                <input id="newTask" type="text", name="newTask"/>
+                <span class="input-group-text"><b>Deadline</b></span>
+                <input id="taskDeadline" type="date", name="taskDeadline"/>
+            </div>
+            <button type="submit" name="newItem" value="newItem" class="btn btn-success">Add Item</button>
+        </div>
+
+        <!--  deleting task   -->
+        <button type="submit", name="deleteList", value="deleteList", class="btn btn-danger">Delete list</button>
+
+
+
+    </form>
+{% endblock %}
+
+

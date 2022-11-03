@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <style type="text/css">
+        .topnav {
+            height:80px;
+            width:100%;
+            position: fixed;
+            z-index:1;
+            top:0;
+            right: 0;
+            background-color:#111;
+            overflow-x: :hidden;
+            padding-top: 20px;
+            text-align: right;
+        }
+
+        .topnav p{
+            padding-right: 30px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: inline;
+        }
+
+        .topnav a{
+            padding-right: 30px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: inline;
+        }
+
+        .topnav a:hover{
+            color: #f1f1f1
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="topnav">
+        {% if user.is_authenticated %}
+            <p>{{ response.user }}</p>
+            <a href="/logout">Logout</a>
+        {% else %}
+            <a href="/login">Login</a>
+        {% endif %}
+    </div>
+
+</body>
+
+</html>

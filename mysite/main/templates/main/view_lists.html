@@ -1,0 +1,35 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    | View lists
+{% endblock %}
+
+{% block content %}
+    <h1>All lists</h1>
+    <hr>
+    <ul class="list-group ">
+    {% for list in todo_lists %}
+        <div class="input-group mb-2">
+
+            {% if forloop.counter|divisibleby:2 %}
+                <a class="list-group-item list-group-item-action d-flex justify-content-between" href={{ list.get_absolute_url }}>
+            {% else %}
+                <a class="list-group-item list-group-item-action d-flex justify-content-between list-group-item-info" href={{ list.get_absolute_url }}>
+            {% endif %}
+                {{ list.name }}
+                    <div>
+                        <span class="badge badge-info badge-pill ">
+                            {{ list.item_set.count }}
+                        </span>
+                        <span class="badge badge-danger badge-pill">
+                            {{ list.imcompleted_tasks_qty }}
+                        </span>
+                    </div>
+                </a>
+                </a>
+        </div>
+    </ul>
+    {% endfor %}
+{% endblock %}
+
+
