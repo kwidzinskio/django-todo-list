@@ -1,10 +1,9 @@
 from django.shortcuts import render
 from .forms import CreateNewList
 from django.http import HttpResponseRedirect, Http404
-from .models import ToDoList, Item
+from .models import ToDoList
 from django.urls import reverse
 from django.db.models import Count, Q
-from django.contrib.auth.models import User
 
 def homepage_view(response):
     context = {
@@ -44,8 +43,8 @@ def create_list_view(response):
                    "response": response,
                    "form": form
                    }
-
         return render(response, "main/create_list.html", context)
+
     else:
         return render(response, "main/log_in_first.html", {})
 

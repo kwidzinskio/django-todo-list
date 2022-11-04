@@ -17,8 +17,15 @@
             <div class="input-group-prepend">
                 <button type="submit", name="save", class="btn btn-success">Create</button>
             </div>
-            {{form.name}}
+            {% for field in form.visible_fields %}
+                {{ field }}
         </div>
+                {{ field.errors }}
+            {% endfor %}
     </form>
 
 {% endblock %}
+
+
+
+
