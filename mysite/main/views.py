@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect, Http404
 from .models import ToDoList, Item
 from django.urls import reverse
 from django.db.models import Count, Q
+from django.contrib.auth.models import User
 
 def homepage_view(response):
     context = {
@@ -12,7 +13,12 @@ def homepage_view(response):
     return render(response, "main/homepage.html", context)
 
 def view_lists_view(response):
-    todo_lists = ToDoList.objects.annotate(imcompleted_tasks_qty=Count('item', filter=Q(item__complete=False)))
+    if response.user.is_authenticated:
+        todo_lists = ToDoList.objects.filter(user=response.user).annotate(
+            imcompleted_tasks_qty=Count('item', filter=Q(item__complete=False)))
+    else:
+        return render(response, "main/log_in_first.html", {})
+
     context = {
         "response": response,
         "todo_lists": todo_lists,
@@ -20,31 +26,40 @@ def view_lists_view(response):
     return render(response, "main/view_lists.html", context)
 
 def create_list_view(response):
-    if response.method == "POST":
-        form = CreateNewList(response.POST)
+    if response.user.is_authenticated:
+        if response.method == "POST":
+            form = CreateNewList(response.POST)
 
-        if form.is_valid():
-            name = form.cleaned_data["name"]
-            to_do_list = ToDoList(name = name)
-            to_do_list.save()
-            return HttpResponseRedirect(reverse('main:view-list-view', kwargs={"id": to_do_list.id}))
+            if form.is_valid():
+                name = form.cleaned_data["name"]
+                to_do_list = ToDoList(name = name)
+                to_do_list.save()
+                response.user.todolist.add(to_do_list)
+                return HttpResponseRedirect(reverse('main:view-list-view', kwargs={"id": to_do_list.id}))
 
+        else:
+            form = CreateNewList()
+
+        context = {
+                   "response": response,
+                   "form": form
+                   }
+
+        return render(response, "main/create_list.html", context)
     else:
-        form = CreateNewList()
-
-    context = {
-               "response": response,
-               "form": form
-               }
-
-    return render(response, "main/create_list.html", context)
+        return render(response, "main/log_in_first.html", {})
 
 def view_list_view(response, id):
     try:
-        list = ToDoList.objects.get(id=id)
+        if response.user.is_authenticated:
+            list = ToDoList.objects.filter(user=response.user).get(id=id)
+        else:
+            response.user = None
+            list = ToDoList.objects.filter(user=response.user).get(id=id)
     except ToDoList.DoesNotExist:
         raise Http404
 
+    # if list in response.user.todolist.all():
     def check_all_changes():
         # task name change
         text = response.POST.get("name" + str(task.id))
@@ -75,7 +90,6 @@ def view_list_view(response, id):
         deadline = response.POST.get("taskDeadline")
         if str(deadline) == "":
             deadline = None
-
         for task in list.item_set.all():
             check_all_changes()
         list.item_set.create(text=text, deadline=deadline, complete=False)
@@ -83,7 +97,6 @@ def view_list_view(response, id):
     # delete list
     elif response.POST.get("deleteList"):
         list.delete()
-
         return HttpResponseRedirect("http://127.0.0.1:8000/view/")
 
     # delete task

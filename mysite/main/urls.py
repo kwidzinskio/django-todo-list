@@ -10,5 +10,5 @@ urlpatterns = [
     path("", homepage_view, name="homepage-view"),
     path("create/", create_list_view, name="create-list-view"),
     path("view/", view_lists_view, name="view-lists-view"),
-    path("view/<int:id>", view_list_view, name="view-list-view")
+    path("view/<int:id>", view_list_view, name="view-list-view"),
 ]

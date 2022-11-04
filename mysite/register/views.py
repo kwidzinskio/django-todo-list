@@ -14,4 +14,8 @@ def register_view(response):
     else:
         form = RegisterForm()
 
-    return render(response, "register/register.html", {"form": form})
+    context = {
+        "form": form
+    }
+
+    return render(response, "register/register.html", context)

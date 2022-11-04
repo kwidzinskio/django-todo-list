@@ -1,9 +1,11 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 class ToDoList(models.Model): #Contest
     name = models.CharField(max_length=200)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="todolist", null=True)
 
     def get_absolute_url(self):
         return reverse("main:view-list-view", kwargs={"id": self.id})

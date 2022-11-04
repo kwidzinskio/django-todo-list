@@ -1,20 +1,17 @@
 {% extends 'main/base.html' %}
 
 {% block title %}
-    | Login
+    | Log in first
 {% endblock %}
 
-{% load crispy_forms_tags %}
-
 {% block content %}
+
     <h1 class="mt-2">
-        Login
+        Access denied
     </h1>
     <hr class="mt-0 mb-4">
-    <form method="POST" class="form-group">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit">Login</button>
-    </form>
+
+    <p>User not logged in!</p>
     <p>Not registered yet? You can register <a href="/register/">here</a></p>
+
 {% endblock %}
