@@ -44,7 +44,7 @@
 
     <div class="topnav">
         {% if user.is_authenticated %}
-            <p>{{ response.user }}</p>
+            <a href="/profile">{{ response.user }}</a>
             <a href="/logout">Logout</a>
         {% else %}
             <a href="/login">Login</a>

@@ -8,3 +8,4 @@ class CreateNewList(forms.Form):
         if len(name) < 4:
             raise forms.ValidationError("Name of list must be longer than 3 characters!")
         return name
+

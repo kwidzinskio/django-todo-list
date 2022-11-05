@@ -19,3 +19,15 @@ def register_view(response):
     }
 
     return render(response, "register/register.html", context)
+
+def profile_view(response):
+    if response.user.is_authenticated:
+        user = response.user
+        context = {
+            "response": response,
+            "user": user,
+            "editUsername": False,
+        }
+        return render(response, "register/profile.html", context)
+    else:
+        return render(response, "register/log_in_first.html", {})

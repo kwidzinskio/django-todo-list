@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect, Http404
 from .models import ToDoList
 from django.urls import reverse
 from django.db.models import Count, Q
+from django.contrib.auth.models import User
 
 def homepage_view(response):
     context = {
@@ -16,7 +17,7 @@ def view_lists_view(response):
         todo_lists = ToDoList.objects.filter(user=response.user).annotate(
             imcompleted_tasks_qty=Count('item', filter=Q(item__complete=False)))
     else:
-        return render(response, "main/log_in_first.html", {})
+        return render(response, "register/log_in_first.html", {})
 
     context = {
         "response": response,
@@ -46,7 +47,7 @@ def create_list_view(response):
         return render(response, "main/create_list.html", context)
 
     else:
-        return render(response, "main/log_in_first.html", {})
+        return render(response, "register/log_in_first.html", {})
 
 def view_list_view(response, id):
     try:
@@ -58,7 +59,6 @@ def view_list_view(response, id):
     except ToDoList.DoesNotExist:
         raise Http404
 
-    # if list in response.user.todolist.all():
     def check_all_changes():
         # task name change
         text = response.POST.get("name" + str(task.id))

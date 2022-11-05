@@ -24,7 +24,7 @@
                 </div>
                 <input name="name{{ item.id }}", type="text", value="{{item.text}}", class="form-control"/>
                 <input name="ddl{{ item.id }}", type="date", value="{{item.deadline|date:'Y-m-d'}}", class="form-control"/>
-                <button type="submit", name="remove{{ item.id }}", value="r{{ item.id }}", class="btn btn-danger">Delete item</button>
+                <button type="submit", name="remove{{ item.id }}", class="btn btn-danger", value="r{{ item.id }}">Delete item</button>
             </div>
         {% endfor %}
 

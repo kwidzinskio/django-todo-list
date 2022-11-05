@@ -3,7 +3,8 @@ from .views import (
     homepage_view,
     create_list_view,
     view_lists_view,
-    view_list_view)
+    view_list_view,
+)
 
 app_name = 'main'
 urlpatterns = [
