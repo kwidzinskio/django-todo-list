@@ -34,6 +34,10 @@
         </ul>
     {% endfor %}
 
+    {% if todo_lists.count == 0 %}
+        <p>Don't have any lists yet? Create one <a href="/create/">here</a></p>
+    {% endif %}
+
 {% endblock %}
 
 
