@@ -96,7 +96,7 @@ def view_list_view(response, id):
     # delete list
     elif response.POST.get("deleteList"):
         list.delete()
-        return HttpResponseRedirect("http://127.0.0.1:8000/view/")
+        return HttpResponseRedirect(reverse('main:view-lists-view',))
 
     # delete task
     for task in list.item_set.all():
