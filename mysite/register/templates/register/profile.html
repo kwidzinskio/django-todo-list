@@ -1,6 +1,7 @@
 {% extends 'main/base.html' %}
-
+{% load static %}
 {% load crispy_forms_tags %}
+
 
 {% block title %}
     | Your profile
@@ -23,6 +24,12 @@
      {% endfor %}
     {% endif %}
 
+    <div class="row">
+        <div class="column" id="column-left">
+            <img src="{% static 'images/indeks.png' %}" alt="profile_pic" width="80%" height="80%"/>
+        </div>
+
+    <div class="column" id="column-right">
     <form method="post" action="">
         {% csrf_token %}
         <table class="table table-striped">
@@ -109,6 +116,7 @@
         </table>
 
     </form>
-
+    </div>
+    </div>
 
 {% endblock %}
