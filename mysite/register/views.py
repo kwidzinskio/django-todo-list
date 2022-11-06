@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm
+from .forms import RegisterForm, ProfileUpdateForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 import re
@@ -7,6 +7,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.password_validation import password_validators_help_texts
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -20,6 +21,7 @@ def register_view(response):
 
     else:
         form = RegisterForm()
+        return render(response, 'register/register.html', {'form': form})
 
     context = {
         "form": form
@@ -32,6 +34,15 @@ def profile_view(response):
         user = User.objects.get(id=response.user.id)
         password_validation = []
         password_validators = password_validators_help_texts()
+        if response.method == 'POST':
+            p_form = ProfileUpdateForm(response.POST,
+                                       response.FILES,
+                                       instance=response.user.profile)
+            if p_form.is_valid():
+                p_form.save()
+
+        else:
+            p_form = ProfileUpdateForm(instance=response.user.profile)
         context = {
             "response": response,
             "user": user,
@@ -40,6 +51,7 @@ def profile_view(response):
             "edit_password": False,
             "password_validation": password_validation,
             "password_validators": password_validators,
+            'p_form': p_form,
         }
 
         if response.POST.get("editUsername"):
@@ -71,11 +83,12 @@ def profile_view(response):
 
         elif response.POST.get("editPassword"):
             context["edit_password"] = True
-        elif response.POST.get("csrfmiddlewaretoken"): #todo
+        elif response.POST.get("saveNewPassword"):
             old_password = response.POST.get("oldPassword")
             new_password = response.POST.get("newPassword")
             new_password_repeat = response.POST.get("newPasswordRepeat")
-            if len(new_password) >= 8 == None and user.check_password(old_password) and new_password == new_password_repeat:
+            if len(new_password) >= 8 and user.check_password(old_password) and new_password == new_password_repeat:
+                print(old_password, new_password, new_password_repeat)
                 user.set_password(new_password)
                 user.save()
                 update_session_auth_hash(response, user)
