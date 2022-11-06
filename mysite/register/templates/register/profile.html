@@ -1,5 +1,7 @@
 {% extends 'main/base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block title %}
     | Your profile
 {% endblock %}
@@ -10,31 +12,103 @@
     </h1>
     <hr class="mt-0 mb-4">
 
-      <table class="table table-striped table-hover">
-        <tbody>
-          <tr>
-            <th scope="row">Username</th>
-            <td>{{user.username}}</td>
-            <td style="text-align: right">
-              <button type="submit" class="btn btn-success" name="editUsername" value="editUsername">Edit</button>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Email</th>
-            <td>{{user.email}}</td>
-            <td style="text-align: right">
-              <button type="button" class="btn btn-success" name="editEmail">Edit</button>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Password</th>
-            <td>***********</td>
-            <td style="text-align: right">
-              <button type="button" class="btn btn-success" name="editPassword">Edit</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-dismissible {{ message.tags }}">
+          <button type="button" class="close" data-dismiss="alert">
+          ×
+          </button>
+          <strong>{{message}}</strong>
+        </div>
+     {% endfor %}
+    {% endif %}
+
+    <form method="post" action="">
+        {% csrf_token %}
+        <table class="table table-striped">
+          <tbody>
+
+            <tr>
+                <th scope="row">Username</th>
+                <td>{{user.username}}</td>
+                <td style="text-align: right">
+                    <button type="submit" name="editUsername" value="editUsername" class="btn btn-primary">Edit</button>
+                </td>
+            </tr>
+            {% if edit_username %}
+            <tr>
+                <th scope="row">&nbsp&nbsp&nbspNew Username</th>
+                <td>
+                    <input class="form-control" id="newUsername" type="text" name="newUsername"/>
+                </td>
+                <td style="text-align: right">
+                    <button type="submit" name="saveNewUsername" value="saveNewUsername" class="btn btn-warning">Save</button>
+                </td>
+            </tr>
+            {% endif %}
+
+            <tr>
+              <th scope="row">Email</th>
+              <td>{{user.email}}</td>
+              <td style="text-align: right">
+                <button type="submit" name="editEmail" value="editEmail" class="btn btn-primary">Edit</button>
+              </td>
+            </tr>
+            {% if edit_email %}
+            <tr>
+                <th scope="row">&nbsp&nbsp&nbspNew email</th>
+                <td>
+                    <input class="form-control" id="newEmail" type="text" name="newEmail"/>
+                </td>
+                <td style="text-align: right">
+                    <button type="submit" name="saveNewEmail" value="saveNewEmail" class="btn btn-warning">Save</button>
+                </td>
+            </tr>
+            {% endif %}
+
+            <tr>
+              <th scope="row">Password</th>
+              <td>***********</td>
+              <td style="text-align: right">
+                <button type="submit" name="editPassword" value="editPassword" class="btn btn-primary">Edit</button>
+              </td>
+            </tr>
+            {% if edit_password %}
+            <tr>
+            </tr>
+            <tr>
+              <th scope="row">&nbsp&nbsp&nbspOld password</th>
+              <td>
+                <input class="form-control" id="oldPassword" type="password" name="oldPassword"/>
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+                <th scope="row">&nbsp&nbsp&nbspNew password</th>
+                <td style="text-align: justify">
+                    <input class="form-control" id="newPassword" type="password" name="newPassword"/>
+                </td>
+                <td style="text-align: justify; font-size:11px">
+                    {% for validator in password_validators %}
+                        <p>{{ validator }}</p>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">&nbsp&nbsp&nbspConfrim password</th>
+                <td>
+                    <input class="form-control" id="newPasswordRepeat" type="password" name="newPasswordRepeat"/>
+                </td>
+                <td style="text-align: right">
+                    <button type="submit" name="saveNewPassword" value="saveNewPassword" class="btn btn-warning">Save</button>
+                </td>
+            </tr>
+            {% endif %}
+
+          </tbody>
+        </table>
+
+    </form>
 
 
 {% endblock %}

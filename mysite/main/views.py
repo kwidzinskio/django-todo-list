@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, Http404
 from .models import ToDoList
 from django.urls import reverse
 from django.db.models import Count, Q
-from django.contrib.auth.models import User
+
 
 def homepage_view(response):
     context = {
@@ -84,7 +84,8 @@ def view_list_view(response, id):
             check_all_changes()
 
     # add new item
-    elif response.POST.get("newItem"):
+    elif response.POST.get("newTask"):
+        print('afasasa')
         text = response.POST.get("newTask")
         deadline = response.POST.get("taskDeadline")
         if str(deadline) == "":
