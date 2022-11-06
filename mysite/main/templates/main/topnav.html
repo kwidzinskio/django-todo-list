@@ -9,7 +9,7 @@
             width:100%;
             position: fixed;
             z-index:1;
-            top:0;
+            top: 0;
             right: 0;
             background-color:#111;
             overflow-x: :hidden;
@@ -44,7 +44,9 @@
 
     <div class="topnav">
         {% if user.is_authenticated %}
-            <a href="/profile">{{ response.user }}</a>
+            <a href="/profile">
+                <img width="2%" src="{{ user.profile.image.url }}">
+            </a>
             <a href="/logout">Logout</a>
         {% else %}
             <a href="/login">Login</a>

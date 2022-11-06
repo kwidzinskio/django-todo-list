@@ -11,7 +11,6 @@ from django.contrib.auth.password_validation import password_validators_help_tex
 
 # Create your views here.
 def register_view(response):
-
     if response.method == "POST":
         form = RegisterForm(response.POST)
 
